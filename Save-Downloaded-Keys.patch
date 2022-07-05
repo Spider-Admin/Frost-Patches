@@ -1,0 +1,28 @@
+diff --recursive --strip-trailing-cr --unified --recursive --unified a/frost.core/src/main/java/frost/storage/perst/TrackDownloadKeysStorage.java b/frost.core/src/main/java/frost/storage/perst/TrackDownloadKeysStorage.java
+--- a/frost.core/src/main/java/frost/storage/perst/TrackDownloadKeysStorage.java	Fri Apr 03 14:48:12 2020
++++ b/frost.core/src/main/java/frost/storage/perst/TrackDownloadKeysStorage.java	Fri Apr 03 18:08:09 2020
+@@ -49,12 +49,19 @@
+ 		if( getStorage() == null ) {
+ 			return;
+ 		}
+-		if( trackDownloadKeys.getStorage() == null ) {
+-			if( addToIndices(trackDownloadKeys)) {
+-				trackDownloadKeys.makePersistent(getStorage());
++		if( !beginExclusiveThreadTransaction() ) {
++			return;
++		}
++		try {
++			if( trackDownloadKeys.getStorage() == null ) {
++				if( addToIndices(trackDownloadKeys)) {
++					trackDownloadKeys.makePersistent(getStorage());
++				}
++			} else {
++				trackDownloadKeys.modify();
+ 			}
+-		} else {
+-			trackDownloadKeys.modify();
++		} finally {
++			endThreadTransaction();
+ 		}
+ 	}
+

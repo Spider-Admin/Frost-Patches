@@ -1,0 +1,12 @@
+diff --recursive --strip-trailing-cr --unified --recursive --unified a/frost.core/src/main/java/frost/util/FrostCrypt.java b/frost.core/src/main/java/frost/util/FrostCrypt.java
+--- a/frost.core/src/main/java/frost/util/FrostCrypt.java	2019-07-21 20:49:42.052151000 +0200
++++ b/frost.core/src/main/java/frost/util/FrostCrypt.java	2019-07-21 20:23:30.165891900 +0200
+@@ -37,7 +37,7 @@
+ import org.bouncycastle.crypto.params.*;
+ import org.bouncycastle.crypto.signers.*;
+ import org.bouncycastle.jce.provider.*;
+-import org.bouncycastle.util.encoders.*;
++import org.bouncycastle.util.encoders.Base64;
+
+ /**
+  * Implementation of the crypto layer.

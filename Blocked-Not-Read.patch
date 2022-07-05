@@ -1,0 +1,12 @@
+diff --recursive --strip-trailing-cr --unified --recursive --unified a/frost.core/src/main/java/frost/messaging/frost/boards/TOF.java b/frost.core/src/main/java/frost/messaging/frost/boards/TOF.java
+--- a/frost.core/src/main/java/frost/messaging/frost/boards/TOF.java	2019-07-21 20:49:43.434503700 +0200
++++ b/frost.core/src/main/java/frost/messaging/frost/boards/TOF.java	2019-07-21 20:23:30.148933200 +0200
+@@ -266,7 +266,7 @@
+         final boolean isBlocked = isBlocked(newMsg, board);
+         if( isBlocked ) {
+             // if message is blocked, reset new state
+-            newMsg.setNew(false);
++            // newMsg.setNew(false);
+         }
+
+         final int messageInsertedRC;

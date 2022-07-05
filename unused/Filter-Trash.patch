@@ -1,0 +1,19 @@
+diff --recursive --strip-trailing-cr --unified --recursive --unified a/frost.core/src/main/java/frost/messaging/frost/boards/TOF.java b/frost.core/src/main/java/frost/messaging/frost/boards/TOF.java
+--- a/frost.core/src/main/java/frost/messaging/frost/boards/TOF.java	2019-07-21 20:49:43.434503700 +0200
++++ b/frost.core/src/main/java/frost/messaging/frost/boards/TOF.java	2019-07-21 20:23:30.148933200 +0200
+@@ -1025,6 +1028,15 @@
+             // Block by body
+             if ( blockMsgBody ) {
+                 final String content = message.getContent().toLowerCase();
++
++                // Check for messages without spaces and only one long word
++                String contentWithoutSignature = content.substring(content.indexOf('\n') + 1);
++                if((contentWithoutSignature.indexOf(" ") == -1) && (contentWithoutSignature.indexOf("sk@") == -1) && (contentWithoutSignature.indexOf("chk@") == -1) && (contentWithoutSignature.length() > 16))
++                    {
++                    logger.fine(String.format("Message \"%s\" has been blocked!", contentWithoutSignature));
++                    return true;
++                    }
++
+                 final StringTokenizer blockWords =
+                     new StringTokenizer(Core.frostSettings.getValue(SettingsClass.MESSAGE_BLOCK_BODY), ";");
+                 while (blockWords.hasMoreTokens()) {

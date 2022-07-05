@@ -1,0 +1,35 @@
+diff --recursive --strip-trailing-cr --unified --recursive --unified a/frost.core/src/main/java/frost/messaging/frost/FrostMessageObject.java b/frost.core/src/main/java/frost/messaging/frost/FrostMessageObject.java
+--- a/frost.core/src/main/java/frost/messaging/frost/FrostMessageObject.java	2019-07-21 20:49:43.748766700 +0200
++++ b/frost.core/src/main/java/frost/messaging/frost/FrostMessageObject.java	2019-07-21 20:23:30.128986700 +0200
+@@ -24,6 +24,7 @@
+ import java.util.Enumeration;
+ import java.util.List;
+ import java.util.StringTokenizer;
++import java.util.logging.*;
+
+ import javax.swing.tree.MutableTreeNode;
+ import javax.swing.tree.TreePath;
+@@ -49,6 +50,8 @@
+ @SuppressWarnings("serial")
+ public class FrostMessageObject extends AbstractMessageObject implements TableMember<FrostMessageObject> {
+
++    private static final Logger logger = Logger.getLogger(FrostMessageObject.class.getName());
++
+     transient private PerstFrostMessageObject perstFrostMessageObject = null;
+
+     transient private final static ArrayList<String> EMPTY_STRINGLIST = new ArrayList<String>(0);
+@@ -556,6 +559,14 @@
+     public void add(final MutableTreeNode mutableTreeNode, final boolean silent) {
+         // add sorted
+         final FrostMessageObject frostMessageObject = (FrostMessageObject)mutableTreeNode;
++
++        if(isNodeAncestor(frostMessageObject)) {
++            final String content = frostMessageObject.getContent();
++            final String contentWithoutSignature = content.substring(content.indexOf('\n') + 1);
++            logger.fine(String.format("Invalid message \"%s\" is ignored!", contentWithoutSignature));
++            return;
++            }
++
+         int[] ixs;
+
+         if( getChildren() == null ) {

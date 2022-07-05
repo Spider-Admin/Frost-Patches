@@ -1,0 +1,509 @@
+diff --recursive --strip-trailing-cr --unified --recursive --unified a/frost.core/src/main/java/frost/SettingsClass.java b/frost.core/src/main/java/frost/SettingsClass.java
+--- a/frost.core/src/main/java/frost/SettingsClass.java	2019-07-21 20:49:44.942543000 +0200
++++ b/frost.core/src/main/java/frost/SettingsClass.java	2019-07-21 20:23:30.110036600 +0200
+@@ -202,6 +202,7 @@
+     public static final String JUNK_HIDE_JUNK_MESSAGES = "junk.hideJunkMessages";
+     public static final String JUNK_MARK_JUNK_IDENTITY_BAD = "junk.markJunkIdentityBad";
+
++    public static final String MESSAGE_HIDE_GOOD = "hideGoodMessages";
+     public static final String MESSAGE_HIDE_OBSERVE = "hideObserveMessages";
+     public static final String MESSAGE_HIDE_CHECK = "hideCheckMessages";
+     public static final String MESSAGE_HIDE_BAD = "hideBadMessages";
+@@ -209,6 +210,7 @@
+     public static final String MESSAGE_HIDE_COUNT = "hideMessageCount";
+     public static final String MESSAGE_HIDE_COUNT_EXCLUDE_PRIVATE = "hideMessageCountExcludePrivate";
+
++    public static final String KNOWNBOARDS_BLOCK_FROM_GOOD = "blockBoardsFromGood";
+     public static final String KNOWNBOARDS_BLOCK_FROM_OBSERVE = "blockBoardsFromObserve";
+     public static final String KNOWNBOARDS_BLOCK_FROM_CHECK = "blockBoardsFromCheck";
+     public static final String KNOWNBOARDS_BLOCK_FROM_BAD = "blockBoardsFromBad";
+@@ -931,6 +933,7 @@
+         defaults.put(MESSAGE_HIDE_BAD, "false");
+         defaults.put(MESSAGE_HIDE_CHECK, "false");
+         defaults.put(MESSAGE_HIDE_OBSERVE, "false");
++        defaults.put(MESSAGE_HIDE_GOOD, "false");
+         defaults.put(MESSAGE_HIDE_COUNT, "0");
+         defaults.put(MESSAGE_HIDE_COUNT_EXCLUDE_PRIVATE, "true");
+
+@@ -940,6 +943,7 @@
+         defaults.put(KNOWNBOARDS_BLOCK_FROM_BAD, "true");
+         defaults.put(KNOWNBOARDS_BLOCK_FROM_CHECK, "false");
+         defaults.put(KNOWNBOARDS_BLOCK_FROM_OBSERVE, "false");
++        defaults.put(KNOWNBOARDS_BLOCK_FROM_GOOD, "false");
+
+         defaults.put(DOWNLOAD_MAX_THREADS, "3");
+         defaults.put(DOWNLOADING_ACTIVATED, "true");
+diff --recursive --strip-trailing-cr --unified --recursive --unified a/frost.core/src/main/java/frost/gui/preferences/News2Panel.java b/frost.core/src/main/java/frost/gui/preferences/News2Panel.java
+--- a/frost.core/src/main/java/frost/gui/preferences/News2Panel.java	2019-07-21 20:49:42.902925900 +0200
++++ b/frost.core/src/main/java/frost/gui/preferences/News2Panel.java	2019-07-21 20:23:30.116020100 +0200
+@@ -57,11 +57,13 @@
+     private final JCheckBox hideBadMessagesCheckBox = new JCheckBox();
+     private final JCheckBox hideCheckMessagesCheckBox = new JCheckBox();
+     private final JCheckBox hideObserveMessagesCheckBox = new JCheckBox();
++    private final JCheckBox hideGoodMessagesCheckBox = new JCheckBox();
+     private final JCheckBox hideUnsignedMessagesCheckBox = new JCheckBox();
+
+     private final JCheckBox blockBoardsFromBadCheckBox = new JCheckBox();
+     private final JCheckBox blockBoardsFromCheckCheckBox = new JCheckBox();
+     private final JCheckBox blockBoardsFromObserveCheckBox = new JCheckBox();
++    private final JCheckBox blockBoardsFromGoodCheckBox = new JCheckBox();
+     private final JCheckBox blockBoardsFromUnsignedCheckBox = new JCheckBox();
+
+     private final JLabel hideMessagesLabel = new JLabel();
+@@ -137,7 +139,7 @@
+         constraints.gridy = 0;
+         constraints.fill = GridBagConstraints.HORIZONTAL;
+         constraints.weightx = 1.0;
+-        constraints.gridwidth = 4;
++        constraints.gridwidth = 5;
+         hidePanel.add(hideMessagesLabel, constraints);
+
+         constraints.gridy++;
+@@ -145,18 +147,22 @@
+         constraints.gridwidth = 1;
+         constraints.weightx = 0.0;
+
++
+         constraints.gridx = 0;
+         constraints.insets = new Insets(5, 20, 5, 5);
+-        hidePanel.add(hideObserveMessagesCheckBox, constraints);
++        hidePanel.add(hideGoodMessagesCheckBox, constraints);
+
+         constraints.gridx = 1;
+         constraints.insets = new Insets(5, 5, 0, 5);
+-        hidePanel.add(hideCheckMessagesCheckBox, constraints);
++        hidePanel.add(hideObserveMessagesCheckBox, constraints);
+
+         constraints.gridx = 2;
+-        hidePanel.add(hideBadMessagesCheckBox, constraints);
++        hidePanel.add(hideCheckMessagesCheckBox, constraints);
+
+         constraints.gridx = 3;
++        hidePanel.add(hideBadMessagesCheckBox, constraints);
++
++        constraints.gridx = 4;
+         hidePanel.add(hideUnsignedMessagesCheckBox, constraints);
+
+         return hidePanel;
+@@ -172,7 +178,7 @@
+         constraints.gridy = 0;
+         constraints.fill = GridBagConstraints.HORIZONTAL;
+         constraints.weightx = 1.0;
+-        constraints.gridwidth = 4;
++        constraints.gridwidth = 5;
+         blockBoardsPanel.add(blockBoardsLabel, constraints);
+
+         constraints.gridy++;
+@@ -182,16 +188,19 @@
+
+         constraints.gridx = 0;
+         constraints.insets = new Insets(5, 20, 5, 5);
+-        blockBoardsPanel.add(blockBoardsFromObserveCheckBox, constraints);
++        blockBoardsPanel.add(blockBoardsFromGoodCheckBox, constraints);
+
+         constraints.gridx = 1;
+         constraints.insets = new Insets(5, 5, 0, 5);
+-        blockBoardsPanel.add(blockBoardsFromCheckCheckBox, constraints);
++        blockBoardsPanel.add(blockBoardsFromObserveCheckBox, constraints);
+
+         constraints.gridx = 2;
+-        blockBoardsPanel.add(blockBoardsFromBadCheckBox, constraints);
++        blockBoardsPanel.add(blockBoardsFromCheckCheckBox, constraints);
+
+         constraints.gridx = 3;
++        blockBoardsPanel.add(blockBoardsFromBadCheckBox, constraints);
++
++        constraints.gridx = 4;
+         blockBoardsPanel.add(blockBoardsFromUnsignedCheckBox, constraints);
+
+         return blockBoardsPanel;
+@@ -294,11 +303,13 @@
+         hideBadMessagesCheckBox.setSelected(settings.getBoolValue(SettingsClass.MESSAGE_HIDE_BAD));
+         hideCheckMessagesCheckBox.setSelected(settings.getBoolValue(SettingsClass.MESSAGE_HIDE_CHECK));
+         hideObserveMessagesCheckBox.setSelected(settings.getBoolValue(SettingsClass.MESSAGE_HIDE_OBSERVE));
++        hideGoodMessagesCheckBox.setSelected(settings.getBoolValue(SettingsClass.MESSAGE_HIDE_GOOD));
+
+         blockBoardsFromUnsignedCheckBox.setSelected(settings.getBoolValue(SettingsClass.KNOWNBOARDS_BLOCK_FROM_UNSIGNED));
+         blockBoardsFromBadCheckBox.setSelected(settings.getBoolValue(SettingsClass.KNOWNBOARDS_BLOCK_FROM_BAD));
+         blockBoardsFromCheckCheckBox.setSelected(settings.getBoolValue(SettingsClass.KNOWNBOARDS_BLOCK_FROM_CHECK));
+         blockBoardsFromObserveCheckBox.setSelected(settings.getBoolValue(SettingsClass.KNOWNBOARDS_BLOCK_FROM_OBSERVE));
++        blockBoardsFromGoodCheckBox.setSelected(settings.getBoolValue(SettingsClass.KNOWNBOARDS_BLOCK_FROM_GOOD));
+
+         blockSubjectCheckBox.setSelected(settings.getBoolValue(SettingsClass.MESSAGE_BLOCK_SUBJECT_ENABLED));
+         blockSubjectTextField.setEnabled(blockSubjectCheckBox.isSelected());
+@@ -324,12 +335,14 @@
+         hideBadMessagesCheckBox.setText(language.getString("Options.news.2.trustState.bad"));
+         hideCheckMessagesCheckBox.setText(language.getString("Options.news.2.trustState.check"));
+         hideObserveMessagesCheckBox.setText(language.getString("Options.news.2.trustState.observe"));
++        hideGoodMessagesCheckBox.setText(language.getString("Options.news.2.trustState.good"));
+
+         blockBoardsLabel.setText(language.getString("Options.news.2.dontAddBoardsFromTrustStates"));
+         blockBoardsFromUnsignedCheckBox.setText(language.getString("Options.news.2.trustState.none"));
+         blockBoardsFromBadCheckBox.setText(language.getString("Options.news.2.trustState.bad"));
+         blockBoardsFromCheckCheckBox.setText(language.getString("Options.news.2.trustState.check"));
+         blockBoardsFromObserveCheckBox.setText(language.getString("Options.news.2.trustState.observe"));
++        blockBoardsFromGoodCheckBox.setText(language.getString("Options.news.2.trustState.good"));
+
+         blockSubjectCheckBox.setText(language.getString("Options.news.2.blockMessagesWithSubject"));
+         blockBodyCheckBox.setText(language.getString("Options.news.2.blockMessagesWithBody"));
+@@ -354,11 +367,13 @@
+         settings.setValue(SettingsClass.MESSAGE_HIDE_BAD, hideBadMessagesCheckBox.isSelected());
+         settings.setValue(SettingsClass.MESSAGE_HIDE_CHECK, hideCheckMessagesCheckBox.isSelected());
+         settings.setValue(SettingsClass.MESSAGE_HIDE_OBSERVE, hideObserveMessagesCheckBox.isSelected());
++        settings.setValue(SettingsClass.MESSAGE_HIDE_GOOD, hideGoodMessagesCheckBox.isSelected());
+
+         settings.setValue(SettingsClass.KNOWNBOARDS_BLOCK_FROM_UNSIGNED, blockBoardsFromUnsignedCheckBox.isSelected());
+         settings.setValue(SettingsClass.KNOWNBOARDS_BLOCK_FROM_BAD, blockBoardsFromBadCheckBox.isSelected());
+         settings.setValue(SettingsClass.KNOWNBOARDS_BLOCK_FROM_CHECK, blockBoardsFromCheckCheckBox.isSelected());
+         settings.setValue(SettingsClass.KNOWNBOARDS_BLOCK_FROM_OBSERVE, blockBoardsFromObserveCheckBox.isSelected());
++        settings.setValue(SettingsClass.KNOWNBOARDS_BLOCK_FROM_GOOD, blockBoardsFromGoodCheckBox.isSelected());
+
+         settings.setValue(SettingsClass.MESSAGE_HIDE_COUNT, hideMessageCountTextField.getText());
+         settings.setValue(SettingsClass.MESSAGE_HIDE_COUNT_EXCLUDE_PRIVATE, hideMessageCountExcludePrivateCheckBox.isSelected());
+diff --recursive --strip-trailing-cr --unified --recursive --unified a/frost.core/src/main/java/frost/gui/preferences/OptionsFrame.java b/frost.core/src/main/java/frost/gui/preferences/OptionsFrame.java
+--- a/frost.core/src/main/java/frost/gui/preferences/OptionsFrame.java	2019-07-21 20:49:42.622673500 +0200
++++ b/frost.core/src/main/java/frost/gui/preferences/OptionsFrame.java	2019-07-21 20:23:30.122005300 +0200
+@@ -76,6 +76,7 @@
+     private boolean checkHideBadMessages;
+     private boolean checkHideCheckMessages;
+     private boolean checkHideObserveMessages;
++    private boolean checkHideGoodMessages;
+     private boolean checkHideJunkMessages;
+     private String checkMaxMessageDisplay;
+     private String checkMaxMessageDownload;
+@@ -502,6 +503,7 @@
+             || (checkHideBadMessages != settings.getBoolValue(SettingsClass.MESSAGE_HIDE_BAD))
+             || (checkHideCheckMessages != settings.getBoolValue(SettingsClass.MESSAGE_HIDE_CHECK))
+             || (checkHideObserveMessages != settings.getBoolValue(SettingsClass.MESSAGE_HIDE_OBSERVE))
++            || (checkHideGoodMessages != settings.getBoolValue(SettingsClass.MESSAGE_HIDE_GOOD))
+             || (checkHideJunkMessages != settings.getBoolValue(SettingsClass.JUNK_HIDE_JUNK_MESSAGES))
+             || (checkBlock != settings.getBoolValue(SettingsClass.MESSAGE_BLOCK_SUBJECT_ENABLED))
+             || (checkBlockBody != settings.getBoolValue(SettingsClass.MESSAGE_BLOCK_BODY_ENABLED))
+@@ -540,6 +542,7 @@
+         checkHideBadMessages = settings.getBoolValue(SettingsClass.MESSAGE_HIDE_BAD);
+         checkHideCheckMessages = settings.getBoolValue(SettingsClass.MESSAGE_HIDE_CHECK);
+         checkHideObserveMessages = settings.getBoolValue(SettingsClass.MESSAGE_HIDE_OBSERVE);
++        checkHideGoodMessages = settings.getBoolValue(SettingsClass.MESSAGE_HIDE_GOOD);
+         checkHideJunkMessages = settings.getBoolValue(SettingsClass.JUNK_HIDE_JUNK_MESSAGES);
+         checkBlock = settings.getBoolValue(SettingsClass.MESSAGE_BLOCK_SUBJECT_ENABLED);
+         checkBlockBody = settings.getBoolValue(SettingsClass.MESSAGE_BLOCK_BODY_ENABLED);
+diff --recursive --strip-trailing-cr --unified --recursive --unified a/frost.core/src/main/java/frost/messaging/frost/boards/Board.java b/frost.core/src/main/java/frost/messaging/frost/boards/Board.java
+--- a/frost.core/src/main/java/frost/messaging/frost/boards/Board.java	2019-07-21 20:49:43.439490100 +0200
++++ b/frost.core/src/main/java/frost/messaging/frost/boards/Board.java	2019-07-21 20:23:30.134971100 +0200
+@@ -44,6 +44,7 @@
+     private Boolean hideBad = null;
+     private Boolean hideCheck = null;
+     private Boolean hideObserve = null;
++    private Boolean hideGood = null;
+     private Integer hideMessageCount = null;
+     private Boolean hideMessageCountExcludePrivate = null;
+
+@@ -209,6 +210,18 @@
+         return hideObserve;
+     }
+
++    public boolean getHideGood() {
++        if (!isConfigured() || hideGood == null) {
++            // return default
++            return Core.frostSettings.getBoolValue(SettingsClass.MESSAGE_HIDE_GOOD);
++        }
++        return hideGood.booleanValue();
++    }
++
++    public Boolean getHideGoodObj() {
++        return hideGood;
++    }
++
+     public int getHideMessageCount() {
+         if (!isConfigured() || hideMessageCount == null) {
+             // return default
+@@ -408,6 +421,10 @@
+         hideObserve = val;
+     }
+
++    public void setHideGood(final Boolean val) {
++        hideGood = val;
++    }
++
+     public void setHideMessageCount(final Integer val) {
+     	hideMessageCount = val;
+     }
+diff --recursive --strip-trailing-cr --unified --recursive --unified a/frost.core/src/main/java/frost/messaging/frost/boards/BoardSettingsFrame.java b/frost.core/src/main/java/frost/messaging/frost/boards/BoardSettingsFrame.java
+--- a/frost.core/src/main/java/frost/messaging/frost/boards/BoardSettingsFrame.java	2019-07-21 20:49:43.437495700 +0200
++++ b/frost.core/src/main/java/frost/messaging/frost/boards/BoardSettingsFrame.java	2019-07-21 20:48:14.678531100 +0200
+@@ -86,8 +86,14 @@
+     private final JRadioButton hideObserve_false = new JRadioButton();
+     private final JRadioButton hideObserve_true = new JRadioButton();
+     private final JLabel hideObserveMessagesLabel = new JLabel();
++
+     private final JLabel hideUnsignedMessagesLabel = new JLabel();
+
++    private final JRadioButton hideGood_default = new JRadioButton();
++    private final JRadioButton hideGood_false = new JRadioButton();
++    private final JRadioButton hideGood_true = new JRadioButton();
++    private final JLabel hideGoodMessagesLabel = new JLabel();
++
+     private final JRadioButton hideMessageCount_default = new JRadioButton();
+     private final JRadioButton hideMessageCount_set = new JRadioButton();
+     private final JTextField hideMessageCount_value = new JTextField(6);
+@@ -142,7 +148,7 @@
+         enableEvents(AWTEvent.WINDOW_EVENT_MASK);
+         initialize();
+         //pack();
+-        setSize(430,615);
++        setSize(430,735);
+         setLocationRelativeTo(parentFrame);
+     }
+
+@@ -196,36 +202,6 @@
+         settingsPanel.setBorder(new CompoundBorder(new EtchedBorder(), new EmptyBorder(5,5,5,5)));
+         settingsPanel.setLayout(new GridBagLayout());
+
+-        final ButtonGroup bg2 = new ButtonGroup();
+-        bg2.add(maxMessageDisplay_default);
+-        bg2.add(maxMessageDisplay_set);
+-        final ButtonGroup bg1 = new ButtonGroup();
+-        bg1.add(maxMessageDownload_default);
+-        bg1.add(maxMessageDownload_set);
+-        final ButtonGroup bg3 = new ButtonGroup();
+-        bg3.add(signedOnly_default);
+-        bg3.add(signedOnly_false);
+-        bg3.add(signedOnly_true);
+-        final ButtonGroup bg4 = new ButtonGroup();
+-        bg4.add(hideBad_default);
+-        bg4.add(hideBad_true);
+-        bg4.add(hideBad_false);
+-        final ButtonGroup bg5 = new ButtonGroup();
+-        bg5.add(hideCheck_default);
+-        bg5.add(hideCheck_true);
+-        bg5.add(hideCheck_false);
+-        final ButtonGroup bg6 = new ButtonGroup();
+-        bg6.add(hideObserve_default);
+-        bg6.add(hideObserve_true);
+-        bg6.add(hideObserve_false);
+-        final ButtonGroup bg7 = new ButtonGroup();
+-        bg7.add(storeSentMessages_default);
+-        bg7.add(storeSentMessages_true);
+-        bg7.add(storeSentMessages_false);
+-        final ButtonGroup bg8 = new ButtonGroup();
+-        bg8.add(hideMessageCount_default);
+-        bg8.add(hideMessageCount_set);
+-
+         final GridBagConstraints constraints = new GridBagConstraints();
+         constraints.fill = GridBagConstraints.HORIZONTAL;
+         constraints.anchor = GridBagConstraints.WEST;
+@@ -341,6 +317,22 @@
+         constraints.gridwidth = 3;
+         constraints.gridx = 0;
+         constraints.insets = new Insets(3, 25, 0, 5);
++        settingsPanel.add(hideGoodMessagesLabel, constraints);
++        constraints.insets = new Insets(0, 35, 5, 5);
++        constraints.gridwidth = 1;
++        constraints.gridy++;
++        constraints.gridx = 0;
++        settingsPanel.add(hideGood_default, constraints);
++        constraints.insets = new Insets(0, 0, 0, 5);
++        constraints.gridx = 1;
++        settingsPanel.add(hideGood_true, constraints);
++        constraints.gridx = 2;
++        settingsPanel.add(hideGood_false, constraints);
++        constraints.gridy++;
++
++        constraints.gridwidth = 3;
++        constraints.gridx = 0;
++        constraints.insets = new Insets(3, 25, 0, 5);
+         settingsPanel.add(hideMessageCountLabel, constraints);
+         constraints.insets = new Insets(0, 35, 0, 5);
+         constraints.gridwidth = 1;
+@@ -589,6 +581,14 @@
+                 hideObserve_false.setSelected(true);
+             }
+
++            if (!board.isConfigured() || (board.getHideGoodObj() == null)) {
++                hideGood_default.setSelected(true);
++            } else if (board.getHideGood()) {
++                hideGood_true.setSelected(true);
++            } else {
++                hideGood_false.setSelected(true);
++            }
++
+             if (!board.isConfigured() || (board.getHideMessageCountObj() == null)) {
+                 hideMessageCount_default.setSelected(true);
+             } else {
+@@ -745,6 +745,13 @@
+                     board.setHideObserve(null);
+                 }
+             }
++            if( hideGood_default.isSelected() || hideGood_true.isSelected() || hideGood_false.isSelected() ) {
++                if (hideGood_default.isSelected() == false) {
++                    board.setHideGood(Boolean.valueOf(hideGood_true.isSelected()));
++                } else {
++                    board.setHideGood(null);
++                }
++            }
+             if( hideMessageCount_default.isSelected() || hideMessageCount_set.isSelected() ) {
+                 if (hideMessageCount_default.isSelected() == false) {
+                     board.setHideMessageCount(new Integer(hideMessageCount_value.getText()));
+@@ -823,6 +830,11 @@
+             } else {
+                 board.setHideObserve(null);
+             }
++            if (hideGood_default.isSelected() == false) {
++                board.setHideGood(Boolean.valueOf(hideGood_true.isSelected()));
++            } else {
++                board.setHideGood(null);
++            }
+             if (hideMessageCount_default.isSelected() == false) {
+                 board.setHideMessageCount(new Integer(hideMessageCount_value.getText()));
+             } else {
+@@ -924,6 +936,9 @@
+         hideObserve_default.setText(useDefault);
+         hideObserve_true.setText(yes);
+         hideObserve_false.setText(no);
++        hideGood_default.setText(useDefault);
++        hideGood_true.setText(yes);
++        hideGood_false.setText(no);
+         hideMessageCount_default.setText(useDefault);
+         hideMessageCount_set.setText(language.getString("BoardSettings.label.setTo") + ":");
+         storeSentMessages_default.setText(useDefault);
+@@ -939,6 +954,7 @@
+         hideBadMessagesLabel.setText(language.getString("BoardSettings.label.hideBadMessages"));
+         hideCheckMessagesLabel.setText(language.getString("BoardSettings.label.hideCheckMessages"));
+         hideObserveMessagesLabel.setText(language.getString("BoardSettings.label.hideObserveMessages"));
++        hideGoodMessagesLabel.setText(language.getString("BoardSettings.label.hideGoodMessages"));
+         hideMessageCountLabel.setText(language.getString("BoardSettings.label.hideMessageCountDisplay"));
+         storeSentMessagesLabel.setText(language.getString("BoardSettings.label.storeSentMessages"));
+
+diff --recursive --strip-trailing-cr --unified --recursive --unified a/frost.core/src/main/java/frost/messaging/frost/boards/TOF.java b/frost.core/src/main/java/frost/messaging/frost/boards/TOF.java
+--- a/frost.core/src/main/java/frost/messaging/frost/boards/TOF.java	2019-07-21 20:49:43.434503700 +0200
++++ b/frost.core/src/main/java/frost/messaging/frost/boards/TOF.java	2019-07-21 20:23:30.148933200 +0200
+@@ -992,8 +992,11 @@
+         if (board.getHideObserve() && message.isMessageStatusOBSERVE()) {
+             return true;
+         }
++        if (board.getHideGood() && message.isMessageStatusGOOD()) {
++            return true;
++        }
+
+-        // check for block words, don't check OBSERVE and GOOD
++        // check for block words
+         if (!message.isMessageStatusOBSERVE() && !message.isMessageStatusGOOD()) {
+
+             if ((board.getHideMessageCount() > 0) && !message.isMessageFromME()) {
+@@ -1075,10 +1087,14 @@
+                    (Core.frostSettings.getBoolValue(SettingsClass.KNOWNBOARDS_BLOCK_FROM_OBSERVE) == true) )
+         {
+             logger.info("Boards from OBSERVE message blocked");
++        } else if( currentMsg.isMessageStatusGOOD() &&
++                   (Core.frostSettings.getBoolValue(SettingsClass.KNOWNBOARDS_BLOCK_FROM_GOOD) == true) )
++        {
++            logger.info("Boards from GOOD message blocked");
+         } else if( currentMsg.isMessageStatusTAMPERED() ) {
+             logger.info("Boards from TAMPERED message blocked");
+         } else {
+-            // either GOOD user or not blocked by user
++            //  not blocked by user
+             final LinkedList<Board> addBoards = new LinkedList<Board>();
+             for(final Iterator<BoardAttachment> i = currentMsg.getAttachmentsOfTypeBoard().iterator(); i.hasNext(); ) {
+                 addBoards.add(i.next().getBoardObj());
+diff --recursive --strip-trailing-cr --unified --recursive --unified a/frost.core/src/main/java/frost/messaging/frost/boards/TofTreeXmlIO.java b/frost.core/src/main/java/frost/messaging/frost/boards/TofTreeXmlIO.java
+--- a/frost.core/src/main/java/frost/messaging/frost/boards/TofTreeXmlIO.java	2019-07-21 20:49:43.441484800 +0200
++++ b/frost.core/src/main/java/frost/messaging/frost/boards/TofTreeXmlIO.java	2019-07-21 20:23:30.153925300 +0200
+@@ -260,6 +260,14 @@
+             board.setHideObserve( Boolean.valueOf(val) );
+         }
+
++        val = element.getAttribute("hideGoodMessages");
++        if( val.length() == 0 ) {
++            board.setHideGood( null );
++        } else {
++            board.setHideGood( Boolean.valueOf(val) );
++        }
++
++
+         val = element.getAttribute("hideMessageCount");
+         if( val.length() == 0 ) {
+             board.setHideMessageCount( null );
+@@ -477,9 +485,12 @@
+             if( board.getHideObserveObj() != null ) {
+                 element.setAttribute("hideObserveMessages", "" + board.getHideObserve());
+             }
++            if( board.getHideGoodObj() != null ) {
++                element.setAttribute("hideGoodMessages", "" + board.getHideGood());
++            }
+             if( board.getHideMessageCountObj() != null ) {
+-	            element.setAttribute("hideMessageCount", "" + board.getHideMessageCount());
+-			}
++                element.setAttribute("hideMessageCount", "" + board.getHideMessageCount());
++            }
+             rootBoardElement.appendChild(element);
+         }
+
+diff --recursive --strip-trailing-cr --unified --recursive --unified a/frost.core/src/main/java/frost/messaging/frost/threads/SearchMessagesThread.java b/frost.core/src/main/java/frost/messaging/frost/threads/SearchMessagesThread.java
+--- a/frost.core/src/main/java/frost/messaging/frost/threads/SearchMessagesThread.java	2019-07-21 20:49:43.721806800 +0200
++++ b/frost.core/src/main/java/frost/messaging/frost/threads/SearchMessagesThread.java	2019-07-21 20:23:30.159903300 +0200
+@@ -260,7 +260,7 @@
+             ts.trust_tampered = searchConfig.trust_tampered;
+         } else if( searchConfig.searchTruststates == SearchMessagesConfig.TRUST_DISPLAYED ) {
+             // use trust states configured for board
+-            ts.trust_good = true;
++            ts.trust_good = !b.getHideGood();
+             ts.trust_observe = !b.getHideObserve();
+             ts.trust_check = !b.getHideCheck();
+             ts.trust_bad = !b.getHideBad();
+diff --recursive --strip-trailing-cr --unified --recursive --unified a/frost.core/src/main/resources/i18n/langres.properties b/frost.core/src/main/resources/i18n/langres.properties
+--- a/frost.core/src/main/resources/i18n/langres.properties	2019-07-21 20:49:47.010060900 +0200
++++ b/frost.core/src/main/resources/i18n/langres.properties	2019-07-21 20:23:30.171870600 +0200
+@@ -75,6 +75,7 @@
+ BoardSettings.label.hideBadMessages=Hide messages flagged BAD
+ BoardSettings.label.hideCheckMessages=Hide messages flagged CHECK
+ BoardSettings.label.hideObserveMessages=Hide messages flagged OBSERVE
++BoardSettings.label.hideGoodMessages=Hide messages flagged GOOD
+ BoardSettings.label.hideUnsignedMessages=Hide unsigned messages
+ BoardSettings.label.maximumMessageDisplay=Number of days to display
+ BoardSettings.label.maximumMessageDownload=Number of days to download backwards
+@@ -506,6 +507,8 @@
+ MessagePane.messageTable.popupmenu.setToGood=Mark user GOOD
+ MessagePane.messageTable.popupmenu.setToObserve=Mark user OBSERVE
+ MessagePane.messageTable.popupmenu.undeleteMessage=Undelete message
++MessagePane.messageTable.popupmenu.setComment=Comment identity
++SetIdentityCommentDialog.title=Comment identity
+ MessagePane.messageTable.sig=Sig
+ MessagePane.messageTable.subject=Subject
+ MessagePane.messageText.popupmenu.copy=Copy
+@@ -671,6 +674,7 @@
+ Options.news.2.trustState.check=Check
+ Options.news.2.trustState.none=None (unsigned)
+ Options.news.2.trustState.observe=Observe
++Options.news.2.trustState.good=Good
+ Options.news.3.automaticBoardUpdate=Automatic board update
+ Options.news.3.backgroundColorIfUpdatingBoardIsNotSelected=Background color if updating board is not selected
+ Options.news.3.backgroundColorIfUpdatingBoardIsSelected=Background color if updating board is selected
+diff --recursive --strip-trailing-cr --unified --recursive --unified a/frost.core/src/main/resources/i18n/langres_de.properties b/frost.core/src/main/resources/i18n/langres_de.properties
+--- a/frost.core/src/main/resources/i18n/langres_de.properties	2019-07-21 20:49:46.293927900 +0200
++++ b/frost.core/src/main/resources/i18n/langres_de.properties	2019-07-21 20:23:30.176857900 +0200
+@@ -101,6 +101,7 @@
+ BoardSettings.label.hideCheckMessages=Mit 'CHECK' markierte Nachrichten verbergen
+ BoardSettings.label.hideMessageCountDisplay=Verstecke Nachrichten von Absendern mit weniger als X gesendeten Nachrichten (0 deaktiviert diese Funktion)
+ BoardSettings.label.hideObserveMessages=Mit 'OBSERVE' markierte Nachrichten verbergen
++BoardSettings.label.hideGoodMessages=Mit 'GOOD' markierte Nachrichten verbergen
+ BoardSettings.label.hideUnsignedMessages=Unsignierte Nachrichten verbergen
+ BoardSettings.label.maximumMessageDisplay=Maximale Anzahl an Tagen für angezeigte Nachrichten
+ BoardSettings.label.maximumMessageDownload=Maximale Anzahl an Tagen für rückwirkenden Download
+@@ -529,6 +530,8 @@
+ MessagePane.messageTable.popupmenu.setToGood=Nutzer unterstützen (auf 'GOOD' setzen)
+ MessagePane.messageTable.popupmenu.setToObserve=Nutzer beobachten (OBSERVE)
+ MessagePane.messageTable.popupmenu.undeleteMessage=Rückgängig: Nachricht löschen
++MessagePane.messageTable.popupmenu.setComment=Identität kommentieren
++SetIdentityCommentDialog.title=Identität kommentieren
+ MessagePane.messageTable.sig=Sig
+ MessagePane.messageTable.subject=Betreff
+ MessagePane.messageText.popupmenu.copy=Kopieren
+@@ -692,6 +695,7 @@
+ Options.news.2.trustState.check=Check
+ Options.news.2.trustState.none=None (unsigned)
+ Options.news.2.trustState.observe=Observe
++Options.news.2.trustState.good=Good
+ Options.news.3.automaticBoardUpdate=Automatische Forenaktualisierung
+ Options.news.3.backgroundColorIfUpdatingBoardIsNotSelected=Hintergrundfarbe für aktualisierendes Forum (nicht ausgewählt)
+ Options.news.3.backgroundColorIfUpdatingBoardIsSelected=Hintergrundfarbe für aktualisierndes Forum (ausgewählt)
