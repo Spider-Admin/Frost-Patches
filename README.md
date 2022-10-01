@@ -1,6 +1,6 @@
 # Patches for Frost
 
-A friend send me some patches for [Frost](http://jtcfrost.sourceforge.net/), which I used in the past to manually extract keys from Frost. He allowed me to release the patches under my name and license.
+A friend send me some patches for [Frost](https://jtcfrost.sourceforge.net/), which I used in the past to manually extract keys from Frost. He allowed me to release the patches under my name and license.
 
 ## Patches
 
@@ -25,7 +25,7 @@ Frost: Spider-Admin@Z+d9Knmjd3hQeeZU6BOWPpAAxxs
 
 FMS: Spider-Admin
 
-Sone: [Spider-Admin](http://localhost:8888/Sone/viewSone.html?sone=msXvLpwmDqprlrYZ5ZRZyi7VUcWQ~Wisznv9JkQuSXY) [^1]
+Sone: [Spider-Admin](http://localhost:8888/Sone/viewSone.html?sone=msXvLpwmDqprlrYZ5ZRZyi7VUcWQ~Wisznv9JkQuSXY) [^2]
 
 I do not regularly read the email associated with GitHub.
 
@@ -33,4 +33,5 @@ I do not regularly read the email associated with GitHub.
 
 Frost-Patches by Spider-Admin@Z+d9Knmjd3hQeeZU6BOWPpAAxxs is licensed under the [Apache License, Version 2.0](https://www.apache.org/licenses/LICENSE-2.0).
 
-[^1]: Link requires a running Freenet node at http://localhost:8888/
+[^1]: Freemail requires a running Freenet node
+[^2]: Link requires a running Freenet node at http://localhost:8888/
