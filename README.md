@@ -33,5 +33,5 @@ I do not regularly read the email associated with GitHub.
 
 Frost-Patches by Spider-Admin@Z+d9Knmjd3hQeeZU6BOWPpAAxxs is licensed under the [Apache License, Version 2.0](https://www.apache.org/licenses/LICENSE-2.0).
 
-[^1]: Freemail requires a running Freenet node
-[^2]: Link requires a running Freenet node at http://localhost:8888/
+[^1]: Freemail requires a running Hyphanet node
+[^2]: Link requires a running Hyphanet node at http://localhost:8888/
